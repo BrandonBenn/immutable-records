@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# Generate dummy articles for testing.
+# The generator used in this script is a perl program,
+# lorem that Generate random Latin looking text using Text::Lorem
+# https://metacpan.org/pod/distribution/Text-Lorem/bin/lorem
+
+: "${ARTICLE_DIR:=./articles}"
+
+yn() {
+    # Prompt user with Yes or No and process result.
+    printf '%s [y/n]: ' "$1"
+    stty -icanon
+    answer=$(dd ibs=1 count=1 2>/dev/null)
+    stty icanon
+    printf '\n'
+    glob "$answer" '[yY]'
+}
+
+glob() {
+    case $1 in $2) return 0;
+    esac;
+    return 1;
+}
+
+die() {
+    # Print error message before exiting program.
+    printf "\033[31mError:\033[m %s\n" "$1" >&2
+    exit 1
+}
+
+randnum() {
+    # Generate psuedo random number.
+    # Default range is 1 - 10.
+    shuf -i "${1:-1}"-"${2:-10}" -n 1
+}
+
+init() {
+    # Make Articles folder if it doesn't exists.
+    [ -d "$ARTICLE_DIR" ] &&
+        die "Articles already exists at $ARTICLE_DIR"
+
+    if yn "Create articles?"; then
+        mkdir -p "$ARTICLE_DIR"
+        generate_articles
+        printf 'Articles created at %s\n' "$ARTICLE_DIR"
+    else
+        die "Couldn't create articles."
+    fi
+}
+
+
+generate_articles() {
+    cd "$ARTICLE_DIR" || die "Couldn't create articles."
+
+    for day in {1..5}; do
+        mkdir day_"$day"; cd day_"$day" ||:
+        for post in $(seq 1 "$(randnum 2 8)"); do
+            command lorem -p "$(randnum 5 10)" > post_"$post"
+        done
+        cd ..
+    done
+}
+
+init "$@"
