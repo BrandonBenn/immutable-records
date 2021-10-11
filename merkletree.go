@@ -46,8 +46,9 @@ func (t *MerkleTree) Build(leaves []*Node) {
 			if right >= size {
 				right = left
 			}
-			hash := leaves[left].Hash + leaves[right].Hash
 			left_child, right_child := leaves[left], leaves[right]
+
+			hash := left_child.Hash + right_child.Hash
 			leaves[i] = NewNode(hash, left_child, right_child)
 		}
 		size = (size + 2 - 1) / 2
