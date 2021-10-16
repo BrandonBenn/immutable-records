@@ -1,4 +1,4 @@
-<h1 align="center">Immutable Records using One-Way Hash 📔</h1>
+<h1 align="center">Immutable Records using One-Way Hash</h1>
 
 <br/>
 
