@@ -24,7 +24,7 @@ will give a warning.`
 
 func check(e error) {
 	if e != nil {
-		fmt.Fprintln(os.Stderr, "ERROR: "+e.Error())
+		fmt.Fprintln(os.Stderr, "\033[31;1;4mERROR\033[0m: "+e.Error())
 		os.Exit(1)
 	}
 }
@@ -54,10 +54,10 @@ func verify(directory string) {
 	check(err)
 
 	if string(hash) != tree.Root.Hash {
-		fmt.Fprintln(os.Stderr, `WARNING: computed checksum did NOT match`)
+		fmt.Fprintln(os.Stderr, "\033[31;1;4mWARNING\033[0m: computed checksum did NOT match")
 		os.Exit(1)
 	}
-	fmt.Printf(`%s: OK\n`, directory)
+	fmt.Printf("%s: \033[32;1;4mOK\033[0m\n", directory)
 }
 
 func main() {
