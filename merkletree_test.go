@@ -35,7 +35,7 @@ func TestMerkleTreeBuild(t *testing.T) {
 		leaves = append(leaves, NewNode(hash, nil, nil))
 	}
 
-	tree := BuildMerkleTree(leaves)
+	tree := buildMerkleTree(leaves)
 	result := tree.Root.Hash
 
 	if result != expected {

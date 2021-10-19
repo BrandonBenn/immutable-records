@@ -14,15 +14,7 @@ type Node struct {
 }
 
 func NewNode(hash string, left, right *Node) *Node {
-	return &Node{
-		hash,
-		left,
-		right,
-	}
-}
-
-func (t Node) String() string {
-	return fmt.Sprintf("%v", t.Hash)
+	return &Node{hash, left, right}
 }
 
 type MerkleTree struct{ Root *Node }
@@ -31,14 +23,10 @@ func NewMerkleTree(head *Node) *MerkleTree {
 	return &MerkleTree{Root: head}
 }
 
-func (t MerkleTree) String() string {
-	return fmt.Sprintf("%v", t.Root.Hash)
-}
-
 // In-place algorithm for generating Merkle Tree structure. Build takes an
 // array of leaf nodes that contain the hashes of each document in the
 // directory.
-func BuildMerkleTree(leaves []*Node) *MerkleTree {
+func buildMerkleTree(leaves []*Node) *MerkleTree {
 	// Hash values are then repeatedly pair-wise merge-hashed till a single
 	// root hash value is produced.
 	size := len(leaves)
@@ -73,12 +61,12 @@ func generateHash(content []byte) string {
 // creates leaf nodes containing the hashes corresponding to each file in
 // specified directory.
 func createLeaves(filenames []string) ([]*Node, error) {
-	leaves := make([]*Node, 0)
+	leaves := []*Node{}
 
 	for _, file := range filenames {
 		content, err := os.ReadFile(file)
 		if err != nil {
-            return nil, err
+			return nil, err
 		}
 
 		hash := generateHash(content)
@@ -95,7 +83,7 @@ func getFileNames(directory string) ([]string, error) {
 
 	err := filepath.Walk(directory,
 		func(path string, f os.FileInfo, err error) error {
-			if !f.IsDir() && f.Name() != ChecksumFile {
+			if !f.IsDir() && f.Name() != checksumFile {
 				filenames = append(filenames, path)
 			}
 			return nil

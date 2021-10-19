@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	ChecksumFile = "CHECKSUM"
+	checksumFile = "CHECKSUM"
 	HELP         = `
 NAME
 irow - Immutable Records using One-Way Hash
@@ -21,6 +21,11 @@ hash tree. The hash of root the is stored in a file called CHECKSUM. If any of
 the files in the directory, or the CHECKSUM was tampered with, the verification
 will give a warning.`
 )
+
+func help() {
+	fmt.Println(HELP)
+	os.Exit(1)
+}
 
 func check(e error) {
 	if e != nil {
@@ -40,9 +45,9 @@ func generate(directory string) {
 	leaves, err := createLeaves(filenames)
 	check(err)
 
-	tree := BuildMerkleTree(leaves)
-	os.Remove(directory + "/" + ChecksumFile)
-	err = os.WriteFile(directory+"/"+ChecksumFile, []byte(tree.Root.Hash), 0644)
+	tree := buildMerkleTree(leaves)
+	os.Remove(directory + "/" + checksumFile)
+	err = os.WriteFile(directory+"/"+checksumFile, []byte(tree.Root.Hash), 0644)
 	check(err)
 }
 
@@ -53,8 +58,8 @@ func verify(directory string) {
 	leaves, err := createLeaves(filenames)
 	check(err)
 
-	tree := BuildMerkleTree(leaves)
-	hash, err := os.ReadFile(directory + "/" + ChecksumFile)
+	tree := buildMerkleTree(leaves)
+	hash, err := os.ReadFile(directory + "/" + checksumFile)
 	check(err)
 
 	if string(hash) != tree.Root.Hash {
@@ -67,8 +72,7 @@ func verify(directory string) {
 func main() {
 	args := getArguments()
 	if len(args) < 1 {
-		fmt.Println(HELP)
-		os.Exit(1)
+		help()
 	}
 
 	switch letter := args[0][0]; letter {
