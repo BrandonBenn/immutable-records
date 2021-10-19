@@ -72,20 +72,20 @@ func generateHash(content []byte) string {
 
 // creates leaf nodes containing the hashes corresponding to each file in
 // specified directory.
-func createLeaves(filenames []string) []*Node {
+func createLeaves(filenames []string) ([]*Node, error) {
 	leaves := make([]*Node, 0)
 
 	for _, file := range filenames {
 		content, err := os.ReadFile(file)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, err.Error())
+            return nil, err
 		}
 
 		hash := generateHash(content)
 		leaves = append(leaves, NewNode(hash, nil, nil))
 	}
 
-	return leaves
+	return leaves, nil
 }
 
 // Returns a list of paths for all the files in the directory, ignoring

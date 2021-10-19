@@ -16,7 +16,9 @@ func TestGetFileNames(t *testing.T) {
 
 func TestCreateLeaves(t *testing.T) {
 	filenames := []string{"docs/tests/articles/day_1/post_1"}
-	result := createLeaves(filenames)[0].Hash
+	leaves, _ := createLeaves(filenames)
+
+	result := leaves[0].Hash
 	expected := "df14eda6e74f15dbaad5974e15d90c9bdca9ba601527a93b8d8b6d472e868d16"
 
 	if result != expected {

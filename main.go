@@ -37,7 +37,9 @@ func generate(directory string) {
 	filenames, err := getFileNames(directory)
 	check(err)
 
-	leaves := createLeaves(filenames)
+	leaves, err := createLeaves(filenames)
+	check(err)
+
 	tree := BuildMerkleTree(leaves)
 	os.Remove(directory + "/" + ChecksumFile)
 	err = os.WriteFile(directory+"/"+ChecksumFile, []byte(tree.Root.Hash), 0644)
@@ -48,7 +50,9 @@ func verify(directory string) {
 	filenames, err := getFileNames(directory)
 	check(err)
 
-	leaves := createLeaves(filenames)
+	leaves, err := createLeaves(filenames)
+	check(err)
+
 	tree := BuildMerkleTree(leaves)
 	hash, err := os.ReadFile(directory + "/" + ChecksumFile)
 	check(err)
