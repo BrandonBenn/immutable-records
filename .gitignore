@@ -1,1 +1,21 @@
-bin/*
+build/
+out/
+bin/
+lib/
+Testing/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# Ignore executables and object files
+*.exe
+*.out
+*.o
+*.obj
+
+# Ignore temporary files
+*.tmp
+*.log
+*.swp
+*.swo
+*~
