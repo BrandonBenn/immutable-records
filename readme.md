@@ -15,3 +15,21 @@ will give a warning.
 irow generate [directory]
 irow verify   [directory]
 ```
+
+### Building
+
+```sh
+cmake -S . -B build
+make
+./irow
+```
+
+### Running Tests
+
+To build and run the tests, follow these steps:
+
+```sh
+cmake -S . -B build
+make
+./tests
+```
